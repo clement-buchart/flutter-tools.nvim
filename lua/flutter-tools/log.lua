@@ -83,7 +83,13 @@ end
 ---@param lines string[]
 local function append(buf, lines)
   vim.bo[buf].modifiable = true
-  api.nvim_buf_set_lines(M.buf, -1, -1, true, lines)
+  local result = {}
+  for _,line in ipairs(lines) do
+      for subline in line:gmatch '[^\n]+' do
+        table.insert(result, subline)
+      end
+  end
+  api.nvim_buf_set_lines(M.buf, -1, -1, true, result)
   vim.bo[buf].modifiable = false
 end
 
